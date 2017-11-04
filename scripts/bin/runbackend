@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+cd /vagrant/finance/backend
+source venv/bin/activate
+
+pip install -r packages.pip --upgrade
+/vagrant/scripts/bin/runmigrate
+
+./manage.py runserver

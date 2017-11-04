@@ -1,0 +1,5 @@
+source /home/vagrant/.profile
+source /vagrant/finance/backend/venv/bin/activate
+COLOR_HOST=g
+COLOR_USER=bg
+export PATH="$PATH:/vagrant/scripts/bin"

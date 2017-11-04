@@ -1,0 +1,22 @@
+#!/bin/sh
+
+DB_NAME="finance"
+
+set -e
+
+if [ "$1" = "" ]
+then
+    echo "Usage: $0 <pgdump file>"
+    exit 1
+fi
+
+FILE="$1"
+if ! [ -f "$FILE" ]
+then
+    echo "$FILE not found!"
+    exit 1
+fi
+
+dropdb "$DB_NAME" || true
+createdb -O "$USER" "$DB_NAME"
+pg_restore -x -d "$DB_NAME" -O -n public -1 "$FILE"

@@ -1,0 +1,35 @@
+server {
+    listen [::]:80 ipv6only=off;
+
+    server_name finance.dev;
+    access_log /var/log/nginx/finance.dev.access.log extended;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        # Pass http "upgrade", if present.  This enables websockets.
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        error_page 502 @start-frontend-server;
+        include /etc/nginx/headers.conf;
+    }
+
+    location ~ ^/(api|admin)($|/) {
+        # We could use gunicorn as a systemd service, but that makes
+        # it somewhat harder to debug.
+        proxy_pass http://127.0.0.1:8000;
+
+        error_page 502 @start-backend-dev-server;
+        include /etc/nginx/headers.conf;
+    }
+
+    location @start-frontend-server {
+        default_type text/plain;
+        return 502 "Please start the frontend with `runfrontend`";
+    }
+
+    location @start-backend-server {
+        default_type text/plain;
+        return 502 "Please start the backend with `runbackend`";
+    }
+}

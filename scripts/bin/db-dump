@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DB_NAME="finance"
+
+DUMPFILE=~/$DB_NAME-$(date +"%Y-%m-%d-%H-%M").pgdump
+
+pg_dump -n public -Fc "$DB_NAME" > $DUMPFILE
+echo "Created dump at: $DUMPFILE"

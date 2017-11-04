@@ -1,0 +1,3 @@
+#!/bin/sh
+# This is to workaround a vagrant bug which fucks up the local time.
+sudo service ntp stop && sudo ntpd -gq && sudo service ntp start
